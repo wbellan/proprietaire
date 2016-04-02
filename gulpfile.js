@@ -4,6 +4,13 @@ var gulp = require('gulp'),
     // symdest = require('gulp-symdest'),
     runSeq = require('run-sequence');
 
+var PATHS = {
+    src: {
+        html: 'src/**/*.html'
+    }
+};
+
+
 gulp.task('clean', function(){
     return del('dist/frontend/**/*', {force:true});
 });
@@ -25,8 +32,12 @@ gulp.task('copy:index', function(){
         .pipe(gulp.dest('./dist/frontend'));
 });
 
+gulp.task('copy:html', function () {
+    return gulp.src(PATHS.src.html).pipe(gulp.dest('dist/frontend'));
+});
+
 gulp.task('frontend', function(done){
-    return runSeq('clean', ['copy:vendor', 'copy:index'], done);
+    return runSeq('clean', ['copy:vendor', 'copy:index', 'copy:html'], done);
 })
 
 // Electron Tasks
@@ -49,6 +60,10 @@ gulp.task('copy:spa-for-electron', function(){
         .pipe(gulp.dest('dist/electron-package'));
 });
 
+gulp.task('copy:electron-html', function () {
+    return gulp.src(PATHS.src.html).pipe(gulp.dest('dist/electron-package'));
+});
+
 gulp.task('electron', function(done){
-    return runSeq('clean-electron', ['copy:electron-manifest', 'copy:electron-scripts', 'copy:spa-for-electron'], done);
+    return runSeq('clean-electron', ['copy:electron-manifest', 'copy:electron-scripts', 'copy:spa-for-electron', 'copy:electron-html'], done);
 });
