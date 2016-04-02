@@ -34,8 +34,10 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-dist/vendor/
+dist
 
 # OSX
 .DS_Store
 
+# WebStorm
+.idea/

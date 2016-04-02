@@ -18,7 +18,14 @@
   },
   "main": "gulfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "npm run typings install",
+    "typings": "typings",
+    "tsc": "tsc",
+    "build": "npm run frontend && tsc && gulp electron",
+    "frontend": "gulp frontend && tsc",
+    "serve": "live-server dist/frontend/",
+    "apps": "npm run build && gulp apps",
+    "start": "npm run frontend && tsc && gulp electron && ./node_modules/.bin/electron dist/electron-package"
   },
   "keywords": [],
   "devDependencies": {
