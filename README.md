@@ -1,2 +1,0 @@
-# proprietaire
-Propriétaire
