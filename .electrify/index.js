@@ -1,6 +1,8 @@
-var app       = require('app');
-var browser   = require('browser-window');
-var electrify = require('electrify')(__dirname);
+'use strict';
+
+const app       = require('app');
+const browser   = require('browser-window');
+const electrify = require('electrify')(__dirname);
 
 var window    = null;
 
@@ -17,17 +19,29 @@ app.on('ready', function() {
 
     // open up meteor root url
     window.loadURL(meteor_root_url);
+
+    // Emitted when the window is closed.
+    window.on('closed', function() {
+      // Dereference the window object, usually you would store windows
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      window = null;
+    });
   });
 });
 
 
 app.on('window-all-closed', function() {
-  app.quit();
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform != 'darwin') {
+    app.quit();
+  }
 });
 
 
 app.on('will-quit', function terminate_and_quit(event) {
-  
+
   // if electrify is up, cancel exiting with `preventDefault`,
   // so we can terminate electrify gracefully without leaving child
   // processes hanging in background
@@ -36,7 +50,7 @@ app.on('will-quit', function terminate_and_quit(event) {
     // holds electron termination
     event.preventDefault();
 
-    // gracefully stops electrify 
+    // gracefully stops electrify
     electrify.stop(function(){
 
       // and then finally quit app
@@ -45,29 +59,29 @@ app.on('will-quit', function terminate_and_quit(event) {
   }
 });
 
-// 
+//
 // =============================================================================
-// 
+//
 // the methods bellow can be called seamlessly from your Meteor's
 // client and server code, using:
-// 
+//
 //    Electrify.call('methodname', [..args..], callback);
-// 
+//
 // ATENTION:
 //    From meteor, you can only call these methods after electrify is fully
 //    started, use the Electrify.startup() convenience method for this
-// 
-// 
+//
+//
 // Electrify.startup(function(){
 //   Electrify.call(...);
 // });
-// 
+//
 // =============================================================================
-// 
+//
 // electrify.methods({
 //   'method.name': function(name, done) {
 //     // do things... and call done(err, arg1, ..., argN)
 //     done(null);
 //   }
 // });
-// 
+//
