@@ -1,0 +1,7 @@
+{
+  "name": "Proprietaire",
+  "main": "index.js",
+  "dependencies": {
+    "electrify": "2.1.4"
+  }
+}
