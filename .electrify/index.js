@@ -13,14 +13,13 @@ app.on('ready', function() {
     width: 600, height: 300,
     frame: false,
     resizable: false,
-    'node-integration': false 
+    'node-integration': false
   });
 
   splash.loadURL('file://' + __dirname + '/splash.html');
 
   // electrify start
   electrify.start(function(meteor_root_url) {
-    console.log(meteor_root_url);
     splash.close();
 
     // creates a new electron window

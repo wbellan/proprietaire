@@ -1,1 +1,9 @@
-<p>Propriétaire</p>
+<h1>Propriétaire</h1>
+<div *ngIf="properties.length > 0">
+  <p>Properties:</p>
+  <ul>
+    <li *ngFor="#property of properties">
+      {{ property.name }}
+    </li>
+  </ul>
+</div>
