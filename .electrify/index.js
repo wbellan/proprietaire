@@ -10,9 +10,11 @@ var splash = null;
 app.on('ready', function() {
 
   splash = new browser({
-    width: 600, height: 300,
+    width: 600, height: 450,
     frame: false,
     resizable: false,
+    transparent: true,
+    center: true,
     'node-integration': false
   });
 
@@ -25,6 +27,7 @@ app.on('ready', function() {
     // creates a new electron window
     window = new browser({
       width: 1200, height: 900,
+      title: 'Propriétaire',
       'node-integration': false // node integration must to be off
     });
 

@@ -1,9 +1,9 @@
-.img_container, .img_container2 {
-    text-align: center;
+.centerObject {
+    width: 250px;
     height:280px;
-    border:2px solid orange;
-}
-.img_container > img {
-    position:relative;
-    /*top: calc(50% - 10px);*/
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin-left:-125px; /* Half of Width */
+    margin-top:-140px; /* Half of Height */
 }
