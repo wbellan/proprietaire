@@ -1,11 +1,1 @@
-<h1>Propriétaire</h1>
-<properties-form></properties-form>
-<div *ngIf="properties.length > 0">
-  <p>Properties:</p>
-  <ul>
-    <li *ngFor="#property of properties">
-      {{ property.name }}
-      <button (click)="removeProperty(property)">X</button>
-    </li>
-  </ul>
-</div>
+<router-outlet></router-outlet>
