@@ -23,6 +23,10 @@ class Proprietaire {
       this.properties = Properties.find().fetch();
     }));
   }
+
+  removeProperty(property) {
+    Properties.remove(property._id);
+ }
 }
 
 bootstrap(Proprietaire);

@@ -5,6 +5,7 @@
   <ul>
     <li *ngFor="#property of properties">
       {{ property.name }}
+      <button (click)="removeProperty(property)">X</button>
     </li>
   </ul>
 </div>
