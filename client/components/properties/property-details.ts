@@ -15,4 +15,14 @@ export class PropertyDetails {
     var propertyId = params.get('propertyId');
     this.property = Properties.findOne(propertyId);
   }
+
+  saveProperty(property) {
+    Properties.update(property._id, {
+      $set: {
+        name: property.name,
+        description: property.description,
+        location: property.location
+      }
+    });
+  }
 }

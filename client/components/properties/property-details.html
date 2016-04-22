@@ -1,5 +1,19 @@
 <header>
-  <p><a [routerLink]="['/PropertiesList']">Properties</a>
+  <!-- <p><a [routerLink]="['/PropertiesList']">Properties</a> -->
+  <form (submit)="saveProperty(property)">
+    <label>Name</label>
+    <input type="text" [(ngModel)]="property.name">
+
+    <label>Description</label>
+    <input type="text" [(ngModel)]="property.description">
+
+    <label>Location</label>
+    <input type="text" [(ngModel)]="property.location">
+
+    <button type="submit">Save</button>
+    <button [routerLink]="['/PropertiesList']">Cancel</button>
+  </form>
+
   <h2>{{property.name}}</h2>
   <p>{{property.description}}</p>
   <p>{{property.location}}</p>
