@@ -4,10 +4,10 @@ import {FormBuilder, ControlGroup, Validators, Control} from 'angular2/common';
 import {Properties} from '../../../collections/properties';
 
 @Component({
-  selector: 'properties-form',
-  templateUrl: '/client/components/properties/properties-form.html'
+  selector: 'property-form',
+  templateUrl: '/client/components/property/property-form.html'
 })
-export class PropertiesForm {
+export class PropertyForm {
   propertiesForm: ControlGroup;
 
   constructor() {

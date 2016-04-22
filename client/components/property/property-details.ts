@@ -5,7 +5,7 @@ import {Properties} from '../../../collections/properties';
 
 @Component({
   selector: 'property-details',
-  templateUrl: '/client/components/properties/property-details.html',
+  templateUrl: '/client/components/property/property-details.html',
   directives: [RouterLink]
 })
 export class PropertyDetails {

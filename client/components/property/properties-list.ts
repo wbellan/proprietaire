@@ -3,15 +3,15 @@ import 'zone.js/dist/zone';
 import {NgZone, Component} from 'angular2/core';
 import {RouterLink} from 'angular2/router';
 import {Properties} from '../../../collections/properties';
-import {PropertiesForm} from './properties-form';
+import {PropertyForm} from './property-form';
 
 @Component({
-  selector: 'properties-list',
-  templateUrl: '/client/components/properties/properties-list.html',
-  directives: [PropertiesForm, RouterLink]
+  selector: 'property-list',
+  templateUrl: '/client/components/property/properties-list.html',
+  directives: [PropertyForm, RouterLink]
 })
 
-export class PropertiesList {
+export class PropertyList {
   title: string;
   properties: Array<Object>;
 

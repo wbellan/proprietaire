@@ -3,8 +3,8 @@ import 'zone.js/dist/zone';
 import {Component, provide} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
 import {ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig, APP_BASE_HREF} from 'angular2/router';
-import {PropertiesList} from './components/properties/properties-list';
-import {PropertyDetails} from './components/properties/property-details';
+import {PropertyList} from './components/property/properties-list';
+import {PropertyDetails} from './components/property/property-details';
 
 @Component({
   selector: 'app',
@@ -13,7 +13,7 @@ import {PropertyDetails} from './components/properties/property-details';
 })
 
 @RouteConfig([
-  { path: '/', as: 'PropertiesList', component: PropertiesList },
+  { path: '/', as: 'PropertyList', component: PropertyList },
   { path: '/property/:propertyId', as: 'PropertyDetails', component: PropertyDetails }
 ])
 
