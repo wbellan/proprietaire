@@ -1,9 +1,23 @@
-<form [ngFormModel]="propertiesForm" #f="ngForm" (submit)="addProperty(f.value)">
-  <label>Name</label>
-  <input type="text" ngControl="name">
-  <label>Description</label>
-  <input type="text" ngControl="description">
-  <label>Location</label>
-  <input type="text" ngControl="location">
-  <button type="submit">Add</button>
-</form>
+<div class="row">
+    <form class="col s12" [ngFormModel]="propertiesForm" #f="ngForm" (submit)="addProperty(f.value)">
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="name" type="text" ngControl="name">
+          <label for="name">Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="description" type="text" ngControl="description">
+          <label for="description">Description</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="location" type="text" ngControl="location">
+          <label for="location">Location</label>
+        </div>
+      </div>
+      <button class="btn waves-effect waves-light" type="submit" name="action">Add</button>
+    </form>
+  </div>

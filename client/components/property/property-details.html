@@ -10,8 +10,8 @@
     <label>Location</label>
     <input type="text" [(ngModel)]="property.location">
 
-    <button type="submit">Save</button>
-    <button [routerLink]="['/PropertyList']">Cancel</button>
+    <button type="submit" class="waves-effect waves-light btn">Save</button>
+    <button [routerLink]="['/PropertyList']" class="waves-effect waves-light btn">Cancel</button>
   </form>
 
   <h2>{{property.name}}</h2>
