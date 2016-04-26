@@ -29,7 +29,6 @@
     "zone.js": "^0.6.12"
   },
   "devDependencies": {
-    "electrify": "*",
     "typescript": "^1.8.10",
     "typings": "^0.7.12"
   }
