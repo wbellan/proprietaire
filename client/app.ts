@@ -2,7 +2,8 @@ import 'reflect-metadata';
 import 'zone.js/dist/zone';
 import {Component, provide} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
-import {ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig, APP_BASE_HREF} from 'angular2/router';
+import {ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
+import {APP_BASE_HREF} from 'angular2/platform/common';
 import {PropertyList} from './components/property/properties-list';
 import {PropertyDetails} from './components/property/property-details';
 

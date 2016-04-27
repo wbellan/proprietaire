@@ -1,23 +1,21 @@
-<div class="row">
-    <form class="col s12" [ngFormModel]="propertiesForm" #f="ngForm" (submit)="addProperty(f.value)">
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="name" type="text" ngControl="name">
-          <label for="name">Name</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="description" type="text" ngControl="description">
-          <label for="description">Description</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="location" type="text" ngControl="location">
-          <label for="location">Location</label>
-        </div>
-      </div>
-      <button class="btn waves-effect waves-light" type="submit" name="action">Add</button>
-    </form>
+<form [ngFormModel]="propertiesForm" #f="ngForm" (submit)="addProperty(f.value)">
+  <div class="form-group label-floating is-empty">
+      <label for="name" class="control-label">Property Name</label>
+      <input type="text" class="form-control" id="name" ngControl="name">
+      <span class="help-block">Please input the name of the property.</span>
+      <span class="material-input"></span>
   </div>
+  <div class="form-group label-floating is-empty">
+      <label for="description" class="control-label">Property Description</label>
+      <input type="text" class="form-control" id="description" ngControl="description">
+      <span class="help-block">Please input a decription of the property.</span>
+      <span class="material-input"></span>
+  </div>
+  <div class="form-group label-floating is-empty">
+      <label for="location" class="control-label">Property Location</label>
+      <input type="text" class="form-control" id="name" ngControl="location">
+      <span class="help-block">Please input the city, state, and zip code of the property.</span>
+      <span class="material-input"></span>
+  </div>
+  <button class="btn btn-raised btn-primary" type="submit" name="action">Add</button>
+</form>

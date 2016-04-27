@@ -20,4 +20,4 @@ autopublish             # Publish all data to the clients (for prototyping)
 angular2-compilers
 arboleya:electrify
 less
-materialize:materialize
+fezvrasta:bootstrap-material-design
