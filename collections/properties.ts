@@ -4,12 +4,15 @@ export var Properties = new Mongo.Collection<Property>('properties');
 
 Properties.allow({
   insert: function() {
-    return true;
+    var user = Meteor.user();
+    return !!user;
   },
   update: function() {
-    return true;
+    var user = Meteor.user();
+    return !!user;
   },
   remove: function() {
-    return true;
+    var user = Meteor.user();
+    return !!user;
   }
 });

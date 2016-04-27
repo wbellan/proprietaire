@@ -5,11 +5,12 @@ import {NgZone, Component} from 'angular2/core';
 import {RouterLink} from 'angular2/router';
 import {Properties} from '../../../collections/properties';
 import {PropertyForm} from './property-form';
+import {LoginButtons} from 'angular2-meteor-accounts-ui/login-buttons';
 
 @Component({
   selector: 'property-list',
   templateUrl: '/client/components/property/properties-list.html',
-  directives: [PropertyForm, RouterLink]
+  directives: [PropertyForm, RouterLink, LoginButtons]
 })
 
 export class PropertyList extends MeteorComponent {
