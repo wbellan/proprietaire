@@ -15,6 +15,7 @@ app.on('ready', function() {
     resizable: false,
     transparent: true,
     center: true,
+    movable: false,
     'node-integration': false
   });
 

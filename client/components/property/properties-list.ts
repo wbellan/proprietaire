@@ -14,12 +14,14 @@ import {PropertyForm} from './property-form';
 
 export class PropertyList extends MeteorComponent {
   title: string;
-  properties: Mongo.Cursor<Object>;
+  properties: Mongo.Cursor<Property>;
 
   constructor() {
     super();
     this.title = 'Properties';
-    this.properties = Properties.find();
+    this.subscribe('properties', () => {
+      this.properties = Properties.find();
+    }, true);
   }
 
   removeProperty(property) {
