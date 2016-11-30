@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link, IndexLink} from 'react-router';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Base extends React.Component {
   /**
@@ -22,10 +21,7 @@ class Base extends React.Component {
         </div>
 
         { /* child component will be rendered here */ }
-        <MuiThemeProvider>
           {this.props.children}
-        </MuiThemeProvider>
-
       </div>
     );
   }
