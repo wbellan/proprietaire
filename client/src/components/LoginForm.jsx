@@ -5,50 +5,102 @@ import {Card, CardTitle, CardText, RaisedButton, TextField} from 'material-ui';
 
 class LoginForm extends React.Component {
 
-  /**
-   * Process the form.
-   *
-   * @param {object} event - the JavaScript event object
-   */
-  processForm(event) {
-    // prevent default action. in this case, action is the form submission event
-    event.preventDefault();
+    /**
+     * Class constructor.
+     */
+    constructor() {
+        super();
 
-    console.log("email:", this.refs.email.getValue());
-    console.log("password:", this.refs.password.getValue());
-  }
+        // set the initial component state
+        this.state = {
+            errorMessage: '',
+            errors: {}
+        };
+    }
+
+    /**
+     * Process the form.
+     *
+     * @param {object} event - the JavaScript event object
+     */
+    processForm(event) {
+        // prevent default action. in this case, action is the form submission event
+        event.preventDefault();
+        let self = this;
+
+        console.log("email:", this.refs.email.getValue());
+        console.log("password:", this.refs.password.getValue());
+
+        // return;
+
+        // create a string for an HTTP body message
+        let user = 'email=' + encodeURIComponent(this.refs.email.getValue())
+            + '&password=' + encodeURIComponent(this.refs.password.getValue());
 
 
-  /**
-   * Process the form.
-   *
-   * @param {object} event - the JavaScript event object
-   */
-  render() {
-    return (
-      <Card className="container">
-        <form action="/" onSubmit={this.processForm.bind(this)}>
-          <h2 className="card-heading">Log In</h2>
+        // create an AJAX request
+        let xhr = new XMLHttpRequest();
+        xhr.open('post', '/auth/login');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.responseType = 'json';
+        xhr.onload = function () {
+            let state = {};
 
-          <CardTitle title="Login with Email" />
+            if (this.status == 200) {
+                // success
 
-          <div className="field-line">
-            <TextField ref="email" floatingLabelText="Email" />
-          </div>
+                state.errorMessage = '';
+                state.errors = {};
 
-          <div className="field-line">
-            <TextField ref="password" floatingLabelText="Password" type="password" />
-          </div>
+                // change the component state
+                self.setState(state);
 
-          <div className="button-line">
-            <RaisedButton type="submit" label="Login" primary={true} />
-          </div>
+                console.log("The form is valid");
+            } else {
+                // failure
 
-          <CardText>Don't have an account? <Link to={`/signup`}>Create one</Link></CardText>
-        </form>
-      </Card>
-    );
-  }
+                state.errorMessage = this.response.message;
+                state.errors = this.response.errors ? this.response.errors : {};
+
+                // change the component state
+                self.setState(state);
+            }
+        };
+        xhr.send(user);
+    }
+
+
+    /**
+     * Render the component.
+     */
+    render() {
+        return (
+            <Card className="container">
+                <form action="/" onSubmit={this.processForm.bind(this)}>
+                    <h2 className="card-heading">Login</h2>
+
+                    <CardTitle title="Login with Email"/>
+
+                    {this.state.errorMessage && <p className="error-message">{this.state.errorMessage}</p>}
+
+                    <div className="field-line">
+                        <TextField ref="email" floatingLabelText="Email" errorText={this.state.errors.email}/>
+                    </div>
+
+                    <div className="field-line">
+                        <TextField ref="password" floatingLabelText="Password" type="password"
+                                   errorText={this.state.errors.password}/>
+                    </div>
+
+                    <div className="button-line">
+                        <RaisedButton type="submit" label="Log in" primary={true}/>
+                    </div>
+
+                    <CardText>Don't have an account? <Link to={`/signup`}>Create one</Link></CardText>
+                </form>
+            </Card>
+        );
+    }
 
 }
 

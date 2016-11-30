@@ -60,7 +60,15 @@
 
 	var _routes2 = _interopRequireDefault(_routes);
 
+	var _reactTapEventPlugin = __webpack_require__(609);
+
+	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// Needed for onTouchTap
+	// http://stackoverflow.com/a/34015469/988941
+	(0, _reactTapEventPlugin2.default)();
 
 	_reactDom2.default.render(_react2.default.createElement(_reactRouter.Router, { history: _reactRouter.browserHistory, routes: _routes2.default }), document.getElementById('react-app'));
 
@@ -67047,7 +67055,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -67069,29 +67077,22 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var LoginForm = function (_React$Component) {
-	  _inherits(LoginForm, _React$Component);
-
-	  function LoginForm() {
-	    _classCallCheck(this, LoginForm);
-
-	    return _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).apply(this, arguments));
-	  }
-
-	  _createClass(LoginForm, [{
-	    key: 'processForm',
-
+	    _inherits(LoginForm, _React$Component);
 
 	    /**
-	     * Process the form.
-	     *
-	     * @param {object} event - the JavaScript event object
+	     * Class constructor.
 	     */
-	    value: function processForm(event) {
-	      // prevent default action. in this case, action is the form submission event
-	      event.preventDefault();
+	    function LoginForm() {
+	        _classCallCheck(this, LoginForm);
 
-	      console.log("email:", this.refs.email.getValue());
-	      console.log("password:", this.refs.password.getValue());
+	        // set the initial component state
+	        var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this));
+
+	        _this.state = {
+	            errorMessage: '',
+	            errors: {}
+	        };
+	        return _this;
 	    }
 
 	    /**
@@ -67100,52 +67101,109 @@
 	     * @param {object} event - the JavaScript event object
 	     */
 
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        _materialUi.Card,
-	        { className: 'container' },
-	        _react2.default.createElement(
-	          'form',
-	          { action: '/', onSubmit: this.processForm.bind(this) },
-	          _react2.default.createElement(
-	            'h2',
-	            { className: 'card-heading' },
-	            'Log In'
-	          ),
-	          _react2.default.createElement(_materialUi.CardTitle, { title: 'Login with Email' }),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'field-line' },
-	            _react2.default.createElement(_materialUi.TextField, { ref: 'email', floatingLabelText: 'Email' })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'field-line' },
-	            _react2.default.createElement(_materialUi.TextField, { ref: 'password', floatingLabelText: 'Password', type: 'password' })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'button-line' },
-	            _react2.default.createElement(_materialUi.RaisedButton, { type: 'submit', label: 'Login', primary: true })
-	          ),
-	          _react2.default.createElement(
-	            _materialUi.CardText,
-	            null,
-	            'Don\'t have an account? ',
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: '/signup' },
-	              'Create one'
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
 
-	  return LoginForm;
+	    _createClass(LoginForm, [{
+	        key: 'processForm',
+	        value: function processForm(event) {
+	            // prevent default action. in this case, action is the form submission event
+	            event.preventDefault();
+	            var self = this;
+
+	            console.log("email:", this.refs.email.getValue());
+	            console.log("password:", this.refs.password.getValue());
+
+	            // return;
+
+	            // create a string for an HTTP body message
+	            var user = 'email=' + encodeURIComponent(this.refs.email.getValue()) + '&password=' + encodeURIComponent(this.refs.password.getValue());
+
+	            // create an AJAX request
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('post', '/auth/login');
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.responseType = 'json';
+	            xhr.onload = function () {
+	                var state = {};
+
+	                if (this.status == 200) {
+	                    // success
+
+	                    state.errorMessage = '';
+	                    state.errors = {};
+
+	                    // change the component state
+	                    self.setState(state);
+
+	                    console.log("The form is valid");
+	                } else {
+	                    // failure
+
+	                    state.errorMessage = this.response.message;
+	                    state.errors = this.response.errors ? this.response.errors : {};
+
+	                    // change the component state
+	                    self.setState(state);
+	                }
+	            };
+	            xhr.send(user);
+	        }
+
+	        /**
+	         * Render the component.
+	         */
+
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _materialUi.Card,
+	                { className: 'container' },
+	                _react2.default.createElement(
+	                    'form',
+	                    { action: '/', onSubmit: this.processForm.bind(this) },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        { className: 'card-heading' },
+	                        'Login'
+	                    ),
+	                    _react2.default.createElement(_materialUi.CardTitle, { title: 'Login with Email' }),
+	                    this.state.errorMessage && _react2.default.createElement(
+	                        'p',
+	                        { className: 'error-message' },
+	                        this.state.errorMessage
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'field-line' },
+	                        _react2.default.createElement(_materialUi.TextField, { ref: 'email', floatingLabelText: 'Email', errorText: this.state.errors.email })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'field-line' },
+	                        _react2.default.createElement(_materialUi.TextField, { ref: 'password', floatingLabelText: 'Password', type: 'password',
+	                            errorText: this.state.errors.password })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'button-line' },
+	                        _react2.default.createElement(_materialUi.RaisedButton, { type: 'submit', label: 'Log in', primary: true })
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.CardText,
+	                        null,
+	                        'Don\'t have an account? ',
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/signup' },
+	                            'Create one'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LoginForm;
 	}(_react2.default.Component);
 
 	exports.default = LoginForm;
@@ -67157,7 +67215,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -67179,90 +67237,445 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var SignUpForm = function (_React$Component) {
-	  _inherits(SignUpForm, _React$Component);
+	    _inherits(SignUpForm, _React$Component);
 
-	  function SignUpForm() {
-	    _classCallCheck(this, SignUpForm);
+	    /**
+	     * Class constructor.
+	     */
+	    function SignUpForm() {
+	        _classCallCheck(this, SignUpForm);
 
-	    return _possibleConstructorReturn(this, (SignUpForm.__proto__ || Object.getPrototypeOf(SignUpForm)).apply(this, arguments));
-	  }
+	        // set the initial component state
+	        var _this = _possibleConstructorReturn(this, (SignUpForm.__proto__ || Object.getPrototypeOf(SignUpForm)).call(this));
 
-	  _createClass(SignUpForm, [{
-	    key: 'processForm',
-
+	        _this.state = {
+	            errorMessage: '',
+	            errors: {}
+	        };
+	        return _this;
+	    }
 
 	    /**
 	     * Process the form.
 	     *
 	     * @param {object} event - the JavaScript event object
 	     */
-	    value: function processForm(event) {
-	      // prevent default action. in this case, action is the form submission event
-	      event.preventDefault();
 
-	      console.log("name:", this.refs.name.getValue());
-	      console.log("email:", this.refs.email.getValue());
-	      console.log("password:", this.refs.password.getValue());
-	    }
 
-	    /**
-	     * Render the component.
-	     */
+	    _createClass(SignUpForm, [{
+	        key: 'processForm',
+	        value: function processForm(event) {
+	            // prevent default action. in this case, action is the form submission event
+	            event.preventDefault();
 
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        _materialUi.Card,
-	        { className: 'container' },
-	        _react2.default.createElement(
-	          'form',
-	          { action: '/', onSubmit: this.processForm.bind(this) },
-	          _react2.default.createElement(
-	            'h2',
-	            { className: 'card-heading' },
-	            'Sign Up'
-	          ),
-	          _react2.default.createElement(_materialUi.CardTitle, { title: 'Sign Up with Email' }),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'field-line' },
-	            _react2.default.createElement(_materialUi.TextField, { ref: 'name', floatingLabelText: 'Name' })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'field-line' },
-	            _react2.default.createElement(_materialUi.TextField, { ref: 'email', floatingLabelText: 'Email' })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'field-line' },
-	            _react2.default.createElement(_materialUi.TextField, { ref: 'password', floatingLabelText: 'Password', type: 'password' })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'button-line' },
-	            _react2.default.createElement(_materialUi.RaisedButton, { type: 'submit', label: 'Create New Account', primary: true })
-	          ),
-	          _react2.default.createElement(
-	            _materialUi.CardText,
-	            null,
-	            'Already have an account? ',
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: '/login' },
-	              'Log in'
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
+	            var self = this;
 
-	  return SignUpForm;
+	            // create a string for an HTTP body message
+	            var user = 'name=' + encodeURIComponent(this.refs.name.getValue()) + '&email=' + encodeURIComponent(this.refs.email.getValue()) + '&password=' + encodeURIComponent(this.refs.password.getValue());
+
+	            // create an AJAX request
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('post', '/auth/signup');
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.responseType = 'json';
+	            xhr.onload = function () {
+	                var state = {};
+
+	                if (this.status == 200) {
+	                    // success
+
+	                    state.errorMessage = '';
+	                    state.errors = {};
+
+	                    // change the component state
+	                    self.setState(state);
+
+	                    console.log("The form is valid");
+	                } else {
+	                    // failure
+
+	                    state.errorMessage = this.response.message;
+	                    state.errors = this.response.errors ? this.response.errors : {};
+
+	                    // change the component state
+	                    self.setState(state);
+	                }
+	            };
+	            xhr.send(user);
+	        }
+
+	        /**
+	         * Render the component.
+	         */
+
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _materialUi.Card,
+	                { className: 'container' },
+	                _react2.default.createElement(
+	                    'form',
+	                    { action: '/', onSubmit: this.processForm.bind(this) },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        { className: 'card-heading' },
+	                        'Sign Up'
+	                    ),
+	                    _react2.default.createElement(_materialUi.CardTitle, { title: 'Sign Up with Email' }),
+	                    this.state.errorMessage && _react2.default.createElement(
+	                        'p',
+	                        { className: 'error-message' },
+	                        this.state.errorMessage
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'field-line' },
+	                        _react2.default.createElement(_materialUi.TextField, { ref: 'name', floatingLabelText: 'Name', errorText: this.state.errors.name })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'field-line' },
+	                        _react2.default.createElement(_materialUi.TextField, { ref: 'email', floatingLabelText: 'Email', errorText: this.state.errors.email })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'field-line' },
+	                        _react2.default.createElement(_materialUi.TextField, { ref: 'password', floatingLabelText: 'Password', type: 'password',
+	                            errorText: this.state.errors.password })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'button-line' },
+	                        _react2.default.createElement(_materialUi.RaisedButton, { type: 'submit', label: 'Create New Account', primary: true })
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.CardText,
+	                        null,
+	                        'Already have an account? ',
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/login' },
+	                            'Log in'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return SignUpForm;
 	}(_react2.default.Component);
 
 	exports.default = SignUpForm;
+
+/***/ },
+/* 609 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {var invariant = __webpack_require__(8);
+	var defaultClickRejectionStrategy = __webpack_require__(610);
+
+	var alreadyInjected = false;
+
+	module.exports = function injectTapEventPlugin (strategyOverrides) {
+	  strategyOverrides = strategyOverrides || {}
+	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
+
+	  if (process.env.NODE_ENV !== 'production') {
+	    invariant(
+	      !alreadyInjected,
+	      'injectTapEventPlugin(): Can only be called once per application lifecycle.\n\n\
+	It is recommended to call injectTapEventPlugin() just before you call \
+	ReactDOM.render(). If you are using an external library which calls injectTapEventPlugin() \
+	itself, please contact the maintainer as it shouldn\'t be called in library code and \
+	should be injected by the application.'
+	    )
+	  }
+
+	  alreadyInjected = true;
+
+	  __webpack_require__(42).injection.injectEventPluginsByName({
+	    'TapEventPlugin':       __webpack_require__(611)(shouldRejectClick)
+	  });
+	};
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 610 */
+/***/ function(module, exports) {
+
+	module.exports = function(lastTouchEvent, clickTimestamp) {
+	  if (lastTouchEvent && (clickTimestamp - lastTouchEvent) < 750) {
+	    return true;
+	  }
+	};
+
+
+/***/ },
+/* 611 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2014 Facebook, Inc.
+	 *
+	 * Licensed under the Apache License, Version 2.0 (the "License");
+	 * you may not use this file except in compliance with the License.
+	 * You may obtain a copy of the License at
+	 *
+	 * http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 * Unless required by applicable law or agreed to in writing, software
+	 * distributed under the License is distributed on an "AS IS" BASIS,
+	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 * See the License for the specific language governing permissions and
+	 * limitations under the License.
+	 *
+	 * @providesModule TapEventPlugin
+	 * @typechecks static-only
+	 */
+
+	"use strict";
+
+	var EventConstants = __webpack_require__(413);
+	var EventPluginUtils = __webpack_require__(44);
+	var EventPropagators = __webpack_require__(41);
+	var SyntheticUIEvent = __webpack_require__(75);
+	var TouchEventUtils = __webpack_require__(612);
+	var ViewportMetrics = __webpack_require__(76);
+
+	var keyOf = __webpack_require__(613);
+	var topLevelTypes = EventConstants.topLevelTypes;
+
+	var isStartish = EventPluginUtils.isStartish;
+	var isEndish = EventPluginUtils.isEndish;
+
+	var isTouch = function(topLevelType) {
+	  var touchTypes = [
+	    'topTouchCancel',
+	    'topTouchEnd',
+	    'topTouchStart',
+	    'topTouchMove'
+	  ];
+	  return touchTypes.indexOf(topLevelType) >= 0;
+	}
+
+	/**
+	 * Number of pixels that are tolerated in between a `touchStart` and `touchEnd`
+	 * in order to still be considered a 'tap' event.
+	 */
+	var tapMoveThreshold = 10;
+	var ignoreMouseThreshold = 750;
+	var startCoords = {x: null, y: null};
+	var lastTouchEvent = null;
+
+	var Axis = {
+	  x: {page: 'pageX', client: 'clientX', envScroll: 'currentPageScrollLeft'},
+	  y: {page: 'pageY', client: 'clientY', envScroll: 'currentPageScrollTop'}
+	};
+
+	function getAxisCoordOfEvent(axis, nativeEvent) {
+	  var singleTouch = TouchEventUtils.extractSingleTouch(nativeEvent);
+	  if (singleTouch) {
+	    return singleTouch[axis.page];
+	  }
+	  return axis.page in nativeEvent ?
+	    nativeEvent[axis.page] :
+	    nativeEvent[axis.client] + ViewportMetrics[axis.envScroll];
+	}
+
+	function getDistance(coords, nativeEvent) {
+	  var pageX = getAxisCoordOfEvent(Axis.x, nativeEvent);
+	  var pageY = getAxisCoordOfEvent(Axis.y, nativeEvent);
+	  return Math.pow(
+	    Math.pow(pageX - coords.x, 2) + Math.pow(pageY - coords.y, 2),
+	    0.5
+	  );
+	}
+
+	var touchEvents = [
+	  'topTouchStart',
+	  'topTouchCancel',
+	  'topTouchEnd',
+	  'topTouchMove',
+	];
+
+	var dependencies = [
+	  'topMouseDown',
+	  'topMouseMove',
+	  'topMouseUp',
+	].concat(touchEvents);
+
+	var eventTypes = {
+	  touchTap: {
+	    phasedRegistrationNames: {
+	      bubbled: keyOf({onTouchTap: null}),
+	      captured: keyOf({onTouchTapCapture: null})
+	    },
+	    dependencies: dependencies
+	  }
+	};
+
+	var now = (function() {
+	  if (Date.now) {
+	    return Date.now;
+	  } else {
+	    // IE8 support: http://stackoverflow.com/questions/9430357/please-explain-why-and-how-new-date-works-as-workaround-for-date-now-in
+	    return function () {
+	      return +new Date;
+	    }
+	  }
+	})();
+
+	function createTapEventPlugin(shouldRejectClick) {
+	  return {
+
+	    tapMoveThreshold: tapMoveThreshold,
+
+	    ignoreMouseThreshold: ignoreMouseThreshold,
+
+	    eventTypes: eventTypes,
+
+	    /**
+	     * @param {string} topLevelType Record from `EventConstants`.
+	     * @param {DOMEventTarget} targetInst The listening component root node.
+	     * @param {object} nativeEvent Native browser event.
+	     * @return {*} An accumulation of synthetic events.
+	     * @see {EventPluginHub.extractEvents}
+	     */
+	    extractEvents: function(
+	      topLevelType,
+	      targetInst,
+	      nativeEvent,
+	      nativeEventTarget
+	    ) {
+
+	      if (!isStartish(topLevelType) && !isEndish(topLevelType)) {
+	        return null;
+	      }
+
+	      if (isTouch(topLevelType)) {
+	        lastTouchEvent = now();
+	      } else {
+	        if (shouldRejectClick(lastTouchEvent, now())) {
+	          return null;
+	        }
+	      }
+
+	      var event = null;
+	      var distance = getDistance(startCoords, nativeEvent);
+	      if (isEndish(topLevelType) && distance < tapMoveThreshold) {
+	        event = SyntheticUIEvent.getPooled(
+	          eventTypes.touchTap,
+	          targetInst,
+	          nativeEvent,
+	          nativeEventTarget
+	        );
+	      }
+	      if (isStartish(topLevelType)) {
+	        startCoords.x = getAxisCoordOfEvent(Axis.x, nativeEvent);
+	        startCoords.y = getAxisCoordOfEvent(Axis.y, nativeEvent);
+	      } else if (isEndish(topLevelType)) {
+	        startCoords.x = 0;
+	        startCoords.y = 0;
+	      }
+	      EventPropagators.accumulateTwoPhaseDispatches(event);
+	      return event;
+	    }
+
+	  };
+	}
+
+	module.exports = createTapEventPlugin;
+
+
+/***/ },
+/* 612 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2014 Facebook, Inc.
+	 *
+	 * Licensed under the Apache License, Version 2.0 (the "License");
+	 * you may not use this file except in compliance with the License.
+	 * You may obtain a copy of the License at
+	 *
+	 * http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 * Unless required by applicable law or agreed to in writing, software
+	 * distributed under the License is distributed on an "AS IS" BASIS,
+	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 * See the License for the specific language governing permissions and
+	 * limitations under the License.
+	 *
+	 * @providesModule TouchEventUtils
+	 */
+
+	var TouchEventUtils = {
+	  /**
+	   * Utility function for common case of extracting out the primary touch from a
+	   * touch event.
+	   * - `touchEnd` events usually do not have the `touches` property.
+	   *   http://stackoverflow.com/questions/3666929/
+	   *   mobile-sarai-touchend-event-not-firing-when-last-touch-is-removed
+	   *
+	   * @param {Event} nativeEvent Native event that may or may not be a touch.
+	   * @return {TouchesObject?} an object with pageX and pageY or null.
+	   */
+	  extractSingleTouch: function(nativeEvent) {
+	    var touches = nativeEvent.touches;
+	    var changedTouches = nativeEvent.changedTouches;
+	    var hasTouches = touches && touches.length > 0;
+	    var hasChangedTouches = changedTouches && changedTouches.length > 0;
+
+	    return !hasTouches && hasChangedTouches ? changedTouches[0] :
+	           hasTouches ? touches[0] :
+	           nativeEvent;
+	  }
+	};
+
+	module.exports = TouchEventUtils;
+
+
+/***/ },
+/* 613 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	/**
+	 * Allows extraction of a minified key. Let's the build system minify keys
+	 * without losing the ability to dynamically use key strings as values
+	 * themselves. Pass in an object with a single key/val pair and it will return
+	 * you the string key of that single record. Suppose you want to grab the
+	 * value for a key 'className' inside of an object. Key/val minification may
+	 * have aliased that key to be 'xa12'. keyOf({className: null}) will return
+	 * 'xa12' in that case. Resolve keys you want to use once at startup time, then
+	 * reuse those resolutions.
+	 */
+	var keyOf = function keyOf(oneKeyObj) {
+	  var key;
+	  for (key in oneKeyObj) {
+	    if (!oneKeyObj.hasOwnProperty(key)) {
+	      continue;
+	    }
+	    return key;
+	  }
+	  return null;
+	};
+
+	module.exports = keyOf;
 
 /***/ }
 /******/ ]);
