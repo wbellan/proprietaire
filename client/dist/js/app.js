@@ -67105,7 +67105,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        _materialUi.Card,
-	        { 'class': 'container' },
+	        { className: 'container' },
 	        _react2.default.createElement(
 	          'form',
 	          { action: '/', onSubmit: this.processForm.bind(this) },

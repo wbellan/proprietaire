@@ -26,7 +26,7 @@ class LoginForm extends React.Component {
    */
   render() {
     return (
-      <Card class="container">
+      <Card className="container">
         <form action="/" onSubmit={this.processForm.bind(this)}>
           <h2 className="card-heading">Log In</h2>
 
