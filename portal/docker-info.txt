@@ -1,13 +1,13 @@
 # Docker information
 
 # Build Image
-docker build -t wbellang/portal-web-app .
+docker build -t wbellang/gatekeeper-web-app .
 
 # List Images
 docker images
 
 # Run Container
-docker run -p 3000:8080 -d wbellang/portal-web-app
+docker run -p 3000:8080 -d wbellang/gatekeeper-web-app
 
 # List all containers (only IDs) docker ps -aq.
 # Stop all running containers. docker stop $(docker ps -aq)
