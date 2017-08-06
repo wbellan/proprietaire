@@ -1,33 +1,15 @@
-.navbar-custom {
-    background-color:#3786f2;
-    color:#ffffff;
-    border-radius:0;
+.navbar-login {
+  width: 305px;
+  padding: 10px;
+  padding-bottom: 0px;
 }
 
-.navbar-custom .navbar-nav > li > a {
-    color:#fff;
+.navbar-login-session {
+  padding: 10px;
+  padding-bottom: 0px;
+  padding-top: 0px;
 }
 
-.navbar-custom .navbar-nav > .active > a {
-    color: #ffffff;
-    background-color:transparent;
-}
-
-.navbar-custom .navbar-nav > li > a:hover,
-.navbar-custom .navbar-nav > li > a:focus,
-.navbar-custom .navbar-nav > .active > a:hover,
-.navbar-custom .navbar-nav > .active > a:focus,
-.navbar-custom .navbar-nav > .open >a {
-    text-decoration: none;
-    background-color: #3786f2;
-}
-
-.navbar-custom .navbar-brand {
-    color:#eeeeee;
-}
-.navbar-custom .navbar-toggle {
-    background-color:#eeeeee;
-}
-.navbar-custom .icon-bar {
-    background-color:#3786f2;
+.icon-size {
+  font-size: 87px;
 }
