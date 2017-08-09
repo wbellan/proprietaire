@@ -8,7 +8,9 @@ router.get('/', isLoggedIn, function(req, res) {
 });
 
 router.get('/signup', (req, res) => {
-  res.render('signup');
+  res.render('signup', {
+    signupError: req.flash('signupError')
+  });
 });
 
 router.post('/signup', passport.authenticate('local.signup', {
